@@ -105,7 +105,7 @@ export default function Navbar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography onClick={() => router.push('/')} variant="h6" noWrap component="div" style={{cursor:'pointer'}}>
             Persistent drawer
           </Typography>
         </Toolbar>

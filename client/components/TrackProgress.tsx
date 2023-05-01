@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 interface ITrackProgressProps {
     left: number;
     right: number;
-    onChange: (e) => void;
+    onChange: (e: any) => void;
 };
 
 const TrackProgress: FC<ITrackProgressProps> = ({left, right, onChange}) => {

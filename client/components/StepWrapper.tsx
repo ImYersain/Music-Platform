@@ -4,7 +4,7 @@ import { Card, Grid, Step, StepLabel, Stepper } from '@mui/material';
 
 interface IStepWrapperProps {
     activeStep: number;
-    children: React.ReactElement
+    children?: any;
 }
 
 

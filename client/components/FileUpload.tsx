@@ -1,15 +1,15 @@
 import React, { FC, useRef } from 'react'
 
 interface IFileUploadProps {
-    setFile: () => null;
+    setFile: Function;
     accept: string;
     children: React.ReactElement
 }
 
 const FileUpload: FC<IFileUploadProps> = ({setFile, accept, children}) => {
-    const ref = useRef<HTMLInputElement>();
+    const ref = useRef<HTMLInputElement>(null);
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFile(e.target.files[0]);
+        (e.target.files?.length) && setFile(e.target.files[0]);
     } 
 
     return (
