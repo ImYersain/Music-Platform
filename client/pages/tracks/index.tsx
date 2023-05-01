@@ -21,7 +21,7 @@ const Index = () => {
                 <Card style={{width: 900}}>
                     <Grid container p={3} justifyContent='space-between'>                        
                         <h1>Tracks list</h1>
-                        <Button onClick={() => router.push('tracks/create')}>Downdload track</Button>
+                        <Button onClick={() => router.push('tracks/create')}>Upload track</Button>
                     </Grid>
                     <TrackList tracks={tracks} />
                 </Card>
