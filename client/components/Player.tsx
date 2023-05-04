@@ -15,13 +15,19 @@ let audio: HTMLAudioElement;
 const Player = () => {
     const track: ITrack =  {_id: '1', artist: 'Zayn', text: 'I dont wanna live forever', audio: 'http://localhost:5000/audio/19c4d32e-105f-4819-be0f-b3d54e55dc55.mp3', picture: 'http://localhost:5000/image/b569afe2-d227-4fec-9fda-7286795b35df.jpg', comments: [{_id: '1', username: 'John', text: 'So so beatiful song!'}], listens: 3, name: 'Baby'};
     const {active, currentTime, duration, volume, pause} = useTypedSelector((state) => state.playerReducer);
-    const {playTrack, pauseTrack, setVolume} = useActions();
+    const {playTrack, pauseTrack, setVolume, setDurationTime, setCurrentTime} = useActions();
 
     useEffect(() => {
         if(!audio) {
             audio = new Audio();
             audio.src = track.audio;
             audio.volume = 1;
+            audio.onloadedmetadata = () => {
+                setDurationTime(Math.ceil(audio.duration));
+            }
+            audio.ontimeupdate = () => {
+                setCurrentTime(Math.ceil(audio.currentTime));
+            }
         }
     }, [])
 
@@ -40,6 +46,11 @@ const Player = () => {
         setVolume(+e.target.value);
     }
 
+    const onChangeCurrentTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+        audio.currentTime = +e.target.value;
+        setCurrentTime(+e.target.value);
+    }
+
     return (
         <div className={styles.player}>
             <IconButton onClick={onPlay}>
@@ -49,7 +60,7 @@ const Player = () => {
                 <div>{track.name}</div>
                 <div className={styles.artist}>{track.artist}</div>
             </Grid>
-            <TrackProgress left={0} right={100} onChange={() => {}} />
+            <TrackProgress left={currentTime} right={duration} onChange={onChangeCurrentTime} />
             <VolumeUp style={{marginLeft: 'auto'}} />
             <TrackProgress left={volume} right={100} onChange={onChangeVolume} />
         </div>
