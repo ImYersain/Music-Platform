@@ -2,18 +2,20 @@ import MainLayout from '@/layouts/MainLayout';
 import { Button, Card, Grid, Box } from '@mui/material';
 import React from 'react';
 import { useRouter } from 'next/router';
-import { ITrack } from '../../types/tracks';
 import { TrackList } from '../../components/TrackList';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { fetchTracks } from '../../store/action-creators/trackThunkActionCreator';
+import { NextThunkDispatch, wrapper } from '../../store/index';
 
 const Index = () => {
     const router = useRouter();
-    const tracks: ITrack[] = [
-        {_id: '1', artist: 'Zayn', text: 'I dont wanna live forever', audio: 'http://localhost:5000/audio/900818bc-b11f-492b-ab81-15627fa0b418.mp3', picture: 'http://localhost:5000/image/b569afe2-d227-4fec-9fda-7286795b35df.jpg', comments: [{_id: '1', username: 'John', text: 'So so beatiful song!'}], listens: 3, name: 'Baby'},
+    const {tracks, error} = useTypedSelector((state) =>  state.trackReducer);
 
-        {_id: '2', artist: 'BTR', text: 'We are', audio: 'http://localhost:5000/audio/900818bc-b11f-492b-ab81-15627fa0b418.mp3', picture: 'http://localhost:5000/image/b569afe2-d227-4fec-9fda-7286795b35df.jpg', comments: [{_id: '1', username: 'John', text: 'So so beatiful song!'}], listens: 3, name: 'We are'},
-
-        {_id: '3', artist: 'Scriptonite', text: 'VCVBBB', audio: 'http://localhost:5000/audio/900818bc-b11f-492b-ab81-15627fa0b418.mp3', picture: 'http://localhost:5000/image/b569afe2-d227-4fec-9fda-7286795b35df.jpg', comments: [{_id: '1', username: 'John', text: 'So so beatiful song!'}], listens: 3, name: 'VCVBBB'}
-    ];
+    if(error) {
+        return <MainLayout>
+            <h1>{error}</h1>
+        </MainLayout>
+    }
 
     return (
         <MainLayout>
@@ -31,3 +33,11 @@ const Index = () => {
 }
 
 export default Index;
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
+    const dispatch = store.dispatch as NextThunkDispatch;
+    await dispatch(await fetchTracks());
+    return {
+        props: {},
+      };
+})

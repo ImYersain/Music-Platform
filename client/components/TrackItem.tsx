@@ -24,9 +24,9 @@ export const TrackItem: FC<ITrackItemProps> = ({track, active = true}) => {
     return (
         <Card className={styles.track} onClick={() => router.push(`/tracks/${track._id}`)}>
             <IconButton onClick={play}>
-                {active? <Pause /> : <PlayArrow />}
+                {active?  <PlayArrow /> : <Pause />}
             </IconButton>
-            <img width={'70px'} height={'70'} src={track.picture} />
+            <img width={'70px'} height={'70'} src={'http://localhost:5000/' + track.picture} />
             <Grid container direction={'column'} className={styles.description}>
                 <div>{track.name}</div>
                 <div className={styles.artist}>{track.artist}</div>

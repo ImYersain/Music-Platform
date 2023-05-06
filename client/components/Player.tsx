@@ -24,10 +24,11 @@ const Player = () => {
             playTrack();
         }
     }, [active]);
+   
 
     const setAudio = () => {
         if(active) {
-            audio.src = active.audio;
+            audio.src = 'http://localhost:5000/' + active.audio;
             audio.volume = 1;
             audio.onloadedmetadata = () => {
                 setDurationTime(Math.ceil(audio.duration));
@@ -35,6 +36,7 @@ const Player = () => {
             audio.ontimeupdate = () => {
                 setCurrentTime(Math.ceil(audio.currentTime));
             }
+            console.log(active);
         }
     }
 
