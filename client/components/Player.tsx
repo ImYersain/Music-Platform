@@ -13,14 +13,21 @@ import { useTypedSelector } from '../hooks/useTypedSelector';
 let audio: HTMLAudioElement;
 
 const Player = () => {
-    const track: ITrack =  {_id: '1', artist: 'Zayn', text: 'I dont wanna live forever', audio: 'http://localhost:5000/audio/19c4d32e-105f-4819-be0f-b3d54e55dc55.mp3', picture: 'http://localhost:5000/image/b569afe2-d227-4fec-9fda-7286795b35df.jpg', comments: [{_id: '1', username: 'John', text: 'So so beatiful song!'}], listens: 3, name: 'Baby'};
     const {active, currentTime, duration, volume, pause} = useTypedSelector((state) => state.playerReducer);
     const {playTrack, pauseTrack, setVolume, setDurationTime, setCurrentTime} = useActions();
 
     useEffect(() => {
         if(!audio) {
             audio = new Audio();
-            audio.src = track.audio;
+        } else {
+            setAudio();
+            playTrack();
+        }
+    }, [active]);
+
+    const setAudio = () => {
+        if(active) {
+            audio.src = active.audio;
             audio.volume = 1;
             audio.onloadedmetadata = () => {
                 setDurationTime(Math.ceil(audio.duration));
@@ -29,7 +36,7 @@ const Player = () => {
                 setCurrentTime(Math.ceil(audio.currentTime));
             }
         }
-    }, [])
+    }
 
     const onPlay = () => {
         if(pause) {
@@ -51,14 +58,18 @@ const Player = () => {
         setCurrentTime(+e.target.value);
     }
 
+    if(!active) {
+        return null;
+    }
+
     return (
         <div className={styles.player}>
             <IconButton onClick={onPlay}>
                 {pause? <PlayArrow /> : <Pause />}
             </IconButton>
             <Grid container direction={'column'} className={styles.description}>
-                <div>{track.name}</div>
-                <div className={styles.artist}>{track.artist}</div>
+                <div>{active?.name}</div>
+                <div className={styles.artist}>{active?.artist}</div>
             </Grid>
             <TrackProgress left={currentTime} right={duration} onChange={onChangeCurrentTime} />
             <VolumeUp style={{marginLeft: 'auto'}} />
