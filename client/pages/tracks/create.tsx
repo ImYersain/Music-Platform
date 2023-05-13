@@ -5,12 +5,36 @@ import { Button, Grid } from '@mui/material';
 import StepOne from '@/components/StepOne';
 import StepTwo from '../../components/StepTwo';
 import StepThree from '../../components/StepThree';
+import { useInput } from '../../hooks/useInput';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const Create = () => {
     const [activeStep, setActiveStep] = useState<number>(0);
+    const nameOfTrack = useInput('');
+    const singerOfTrack = useInput('');
+    const lyricsOfTrack = useInput('');
+    const [audio, setAudio] = useState(null);
+    const [image, setImage] = useState(null);
+    const router = useRouter();
 
     const onNextStep = () => {
-        setActiveStep(prev => prev + 1)
+        if(activeStep !== 2) {
+            setActiveStep(prev => prev + 1)
+        } else {
+            const formData = new FormData();
+            formData.append('name', nameOfTrack.value);
+            formData.append('artist', singerOfTrack.value);
+            formData.append('text', lyricsOfTrack.value);
+            //@ts-ignore
+            formData.append('picture', image);
+            //@ts-ignore
+            formData.append('audio', audio);
+            
+            axios.post('http://localhost:5000/tracks', formData)
+                .then(res => router.push('/tracks'))
+                .catch(e => console.log(e))
+        }
     }
     const onPrevStep = () => {
         setActiveStep(prev => prev - 1)
@@ -20,13 +44,13 @@ const Create = () => {
         <MainLayout>
             <StepWrapper activeStep={activeStep}>
                 {activeStep === 0 && 
-                    <StepOne />
+                    <StepOne nameOfTrack={nameOfTrack} singerOfTrack={singerOfTrack} lyricsOfTrack={lyricsOfTrack} />
                 }
                 {activeStep === 1 && 
-                    <StepTwo />
+                    <StepTwo setImage={setImage} />
                 }
                 {activeStep === 2 && 
-                    <StepThree />
+                    <StepThree setAudio={setAudio} />
                 }
             </StepWrapper>
             <Grid style={{marginTop: '200px'}} container justifyContent="center">

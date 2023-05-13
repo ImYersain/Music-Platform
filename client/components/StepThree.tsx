@@ -1,9 +1,11 @@
-import React, {useState} from 'react'
+import React, {useState, FC} from 'react'
 import FileUpload from './FileUpload';
 import { Button } from '@mui/material';
 
-const StepThree = () => {
-    const [audio, setAudio] = useState(null);
+interface IStepThreeProps {
+    setAudio: React.Dispatch<React.SetStateAction<null>>
+}
+const StepThree: FC<IStepThreeProps> = ({setAudio}) => {
     
     return (
         <div>

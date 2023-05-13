@@ -1,9 +1,12 @@
-import React, {useState} from 'react'
+import React, {useState, FC} from 'react'
 import FileUpload from './FileUpload';
 import { Button } from '@mui/material';
 
-const StepTwo = () => {
-    const [image, setImage] = useState(null);
+interface IStepTwoProps {
+    setImage: React.Dispatch<React.SetStateAction<null>>
+}
+
+const StepTwo: FC<IStepTwoProps> = ({setImage}) => {
     
     return (
         <div>
